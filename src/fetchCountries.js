@@ -1,4 +1,4 @@
-export default function fetchCountries(name){
+export function fetchCountries(name){
     const endPoint = 'https://restcountries.com/v2/name';
     const filter = '?fields=name,capital,population,flags,languages'
     return fetch(`${endPoint}/${name}${filter}`)
