@@ -1,10 +1,9 @@
 import './css/styles.css';
 import _, { reject } from "lodash";
 import Notiflix from 'notiflix';
+import fetchCountries from "./fetchCountries.js";
 
 const DEBOUNCE_DELAY = 300;
-const endPoint = 'https://restcountries.com/v2/name';
-const filter = '?fields=name,capital,population,flags,languages'
 
 const inputField = document.querySelector('#search-box');
 const contriesList = document.querySelector('.country-list');
@@ -14,16 +13,12 @@ inputField.addEventListener("input", _.debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(){
     if(inputField.value === ""){
+        contriesList.innerHTML = "";
+        countryInfoBlock.innerHTML = "";
         return;
     }
-    fetch(`${endPoint}/${inputField.value}${filter}`)
-    .then(response => {
-        if(!response.ok){
-            throw new Error("Oops, there is no country with that name");
-        }
-        return response.json();
-    })
-    .then(data => {
+    
+    fetchCountries(inputField.value).then(data => {
         contriesList.innerHTML = "";
         countryInfoBlock.innerHTML = "";
         if(data.length >= 2 && data.length <= 10){
